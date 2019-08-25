@@ -1,2 +1,14 @@
 *.class
 *.log
+
+/bin/
+
+.settings
+.cache-main
+.classpath
+.project
+.history
+
+target
+
+project/project
