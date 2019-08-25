@@ -1,8 +1,8 @@
 organization := "riot"
 
 name := "sbt-riotctl"
-
 version := "0.1-SNAPSHOT"
+organization := "riot"
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
 sbtPlugin := true
