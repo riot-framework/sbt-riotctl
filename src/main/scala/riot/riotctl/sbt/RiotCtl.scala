@@ -3,7 +3,7 @@ package riot.riotctl.sbt
 import sbt._
 import sbt.Keys.{ sLog, target }
 import riot.riotctl.Target
-import riot.riotctl.Util
+import riot.riotctl.RiotCtlTool
 import scala.collection.Seq
 import scala.collection.JavaConverters
 import com.typesafe.sbt._
@@ -21,7 +21,7 @@ object RiotCtl extends AutoPlugin {
     lazy val install = taskKey[Unit]("Installs an application to a Linux SBC.")
   }
 
-  case class riotTarget(valHostname: String, valUsername: String, valPassword: String) extends Target(valHostname, valUsername, valPassword)
+  case class riotTarget(valHostname: String, valUsername: String, valPassword: String) extends Target(Target.DiscoveryMethod.hostname, valHostname, valUsername, valPassword)
 
   class sbtLogger(log: Logger) extends riot.riotctl.Logger {
     override def debug(s: String): Unit = {
@@ -50,7 +50,7 @@ object RiotCtl extends AutoPlugin {
     val pkg = new File(pkgName)
     val dir = stage.value
     
-    val u = new Util(pkgName, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(log))
+    val u = new RiotCtlTool(pkgName, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(log))
 
     u.ensurePackages(riotPrereqs.value)
     
