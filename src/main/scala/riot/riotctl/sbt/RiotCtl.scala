@@ -27,7 +27,7 @@ object RiotCtl extends AutoPlugin {
     lazy val install = taskKey[Unit]("Installs an application to a Linux SBC.")
   }
 
-  case class riotTarget(valHostname: String, valUsername: String, valPassword: String) extends Target(Target.DiscoveryMethod.hostname, valHostname, valUsername, valPassword)
+  case class riotTarget(valHostname: String, valUsername: String, valPassword: String) extends Target(Target.DiscoveryMethod.mdns_then_host, valHostname, valUsername, valPassword)
 
   class sbtLogger(log: Logger) extends riot.riotctl.Logger {
     override def debug(s: String): Unit = {
