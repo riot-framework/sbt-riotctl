@@ -9,7 +9,7 @@ lazy val root =
       organization := "org.riot-framework",
       name := "sbt-riotctl",
       version := "0.1",
-      scalaVersion := "2.11.12",
+      scalaVersion := "2.12.4",
       sbtPlugin := true
     )
     .settings(releasePublishSettings)
@@ -32,8 +32,7 @@ lazy val releasePublishSettings = Seq(
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseProcess := Seq[ReleaseStep](
-    /** This is the list of tasks to tell the `sbt-release` plugin to run.
-    */
+    /** This is the list of tasks to tell the `sbt-release` plugin to run. */
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
