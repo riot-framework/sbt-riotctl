@@ -3,19 +3,24 @@ import sbt.url
 import xerial.sbt.Sonatype._
 import ReleaseTransformations._
 
-name := "sbt-riotctl"
-version := "0.1"
-organization := "org.riot-framework"
-
-sbtPlugin := true
-
-// resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + ".m2/repository"
+lazy val root =
+  (project in file("."))
+    .settings(
+      organization := "org.riot-framework",
+      name := "sbt-riotctl",
+      version := "0.1",
+      scalaVersion := "2.11.12",
+      sbtPlugin := true
+    )
+    .settings(releasePublishSettings)
+    .settings(libraryDependencies ++= Seq(
+	  "org.riot-framework" % "riotctl" % "0.1"
+	)
+)
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.0")
 
-libraryDependencies ++= Seq(
-  "org.riot-framework" % "riotctl" % "0.1"
-)
+// resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + ".m2/repository"
 
 scalacOptions in Compile ++= Seq("-encoding", "UTF-8", "-deprecation", "-feature")
 javacOptions in Compile ++= Seq("-encoding", "UTF-8")
