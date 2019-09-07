@@ -22,12 +22,14 @@ object RiotCtl extends AutoPlugin {
 
   object Keys {
     lazy val riotPrereqs = settingKey[String]("Prerequisite apt-get packages, space-separated. Defaults to Java 8 and WiringPi.")
+    lazy val riotDbgPort = settingKey[Int]("Port number to use for debugging.")
     lazy val riotTargets = taskKey[Seq[riotTarget]]("Address and access credentials of the target device (e.g. 'raspberrypi', 'pi', 'raspberry')")
 
     lazy val riotInstall = taskKey[Unit]("Installs an application as a Systemd service to a Raspberry Pi or similar device.")
     lazy val riotUninstall = taskKey[Unit]("Remove an aplication from Systemd.")
-    lazy val riotRun = taskKey[Unit]("Runs an application remotely on a Raspberry Pi or similar device.")
+    lazy val riotRun = taskKey[Unit]("Interactively runs an application remotely on a Raspberry Pi or similar device.")
     lazy val riotDebug = taskKey[Unit]("Debugs an application remotely on a Raspberry Pi or similar device, using jdwp remote debugging.")
+    lazy val riotStart = taskKey[Unit]("Starts the application on the remote device.")
     lazy val riotStop = taskKey[Unit]("Stops the application on the remote device.")
   }
 
@@ -55,10 +57,12 @@ object RiotCtl extends AutoPlugin {
     riotTargets := Seq(
       riotTarget("raspberrypi", "pi", "raspberry")),
     riotPrereqs := "oracle-java8-jdk wiringpi",
+    riotDbgPort := 8000,
     riotInstall := installTask.value,
     riotUninstall := uninstallTask.value,
     riotRun := runTask.value,
     riotDebug := debugTask.value,
+    riotStart := startTask.value,
     riotStop := stopTask.value)
 
   private def installTask = Def.task {
@@ -78,7 +82,12 @@ object RiotCtl extends AutoPlugin {
 
   private def debugTask = Def.task {
     new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages().deploy().debug().close();
+      .ensurePackages().deployDbg(riotDbgPort.value).run().close();
+  }
+
+  private def startTask = Def.task {
+    new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+      .ensurePackages().start().close();
   }
 
   private def stopTask = Def.task {
