@@ -1,3 +1,6 @@
+import sbt.Keys.{libraryDependencies, publishMavenStyle}
+import sbt.url
+import xerial.sbt.Sonatype._
 import ReleaseTransformations._
 
 name := "sbt-riotctl"
@@ -41,6 +44,7 @@ lazy val releasePublishSettings = Seq(
   ),
   homepage := Some(url("https://github.com/riot-framework/sbt-riotctl")),
   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
+  sonatypeProjectHosting := Some(GitHubHosting("riot-framework", "sbt-riotctl", "frederic@auberson.net")),
   publishMavenStyle := true,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
