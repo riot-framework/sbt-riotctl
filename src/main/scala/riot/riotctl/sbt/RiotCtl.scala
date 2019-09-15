@@ -92,7 +92,7 @@ object RiotCtl extends AutoPlugin {
 
   private def stopTask = Def.task {
     new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages().stop().close();
+      .stop().close();
   }
 
 }
