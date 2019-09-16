@@ -25,6 +25,11 @@ object RiotCtl extends AutoPlugin {
     lazy val riotDbgPort = settingKey[Int]("Port number to use for debugging.")
     lazy val riotTargets = taskKey[Seq[riotTarget]]("Address and access credentials of the target device (e.g. 'raspberrypi', 'pi', 'raspberry')")
 
+    lazy val riotRequiresI2C = settingKey[Boolean]("Whether to ensure I2C is enabled when deploying.")
+    lazy val riotRequiresSPI = settingKey[Boolean]("Whether to ensure SPI is enabled when deploying.")
+    lazy val riotRequiresSerial = settingKey[Boolean]("Whether to ensure the serial port is enabled when deploying.")
+    lazy val riotRequiresOnewire = settingKey[Boolean]("Whether to ensure 1Wire is enabled when deploying.")
+
     lazy val riotInstall = taskKey[Unit]("Installs an application as a Systemd service to a Raspberry Pi or similar device.")
     lazy val riotUninstall = taskKey[Unit]("Remove an aplication from Systemd.")
     lazy val riotRun = taskKey[Unit]("Interactively runs an application remotely on a Raspberry Pi or similar device.")
@@ -56,6 +61,10 @@ object RiotCtl extends AutoPlugin {
   override lazy val projectSettings: Seq[Setting[_]] = Seq(
     riotTargets := Seq(
       riotTarget("raspberrypi", "pi", "raspberry")),
+    riotRequiresI2C := false,
+    riotRequiresSPI := false,
+    riotRequiresSerial := false,
+    riotRequiresOnewire := false,
     riotPrereqs := "oracle-java8-jdk wiringpi",
     riotDbgPort := 8000,
     riotInstall := installTask.value,
@@ -66,32 +75,36 @@ object RiotCtl extends AutoPlugin {
     riotStop := stopTask.value)
 
   private def installTask = Def.task {
-    new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages().deploy().install().close();
+    new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .deploy().install().close();
   }
 
   private def uninstallTask = Def.task {
-    new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages().uninstall().close();
+    new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+      .uninstall().close();
   }
 
   private def runTask = Def.task {
-    new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages().deploy().run().close();
+    new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .deploy().run().close();
   }
 
   private def debugTask = Def.task {
-    new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages().deployDbg(riotDbgPort.value).run().close();
+    new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .deployDbg(riotDbgPort.value).run().close();
   }
 
   private def startTask = Def.task {
-    new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages().start().close();
+    new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .start().close();
   }
 
   private def stopTask = Def.task {
-    new RiotCtlTool(packageName.value, riotPrereqs.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+    new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
       .stop().close();
   }
 
