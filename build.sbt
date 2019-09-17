@@ -46,7 +46,7 @@ lazy val releasePublishSettings = Seq(
     ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
     pushChanges
   ),
-  homepage := Some(url("https://github.com/riot-framework/sbt-riotctl")),
+  homepage := Some(url("https://riot.community")),
   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
   sonatypeProjectHosting := Some(GitHubHosting("riot-framework", "sbt-riotctl", "frederic@auberson.net")),
   publishMavenStyle := true,
