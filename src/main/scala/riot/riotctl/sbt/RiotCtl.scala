@@ -29,6 +29,7 @@ object RiotCtl extends AutoPlugin {
     lazy val riotRequiresSPI = settingKey[Boolean]("Whether to ensure SPI is enabled when deploying.")
     lazy val riotRequiresSerial = settingKey[Boolean]("Whether to ensure the serial port is enabled when deploying.")
     lazy val riotRequiresOnewire = settingKey[Boolean]("Whether to ensure 1Wire is enabled when deploying.")
+    lazy val riotUpdateTime = settingKey[Boolean]("Whether to update the target device's clock when deploying. This will have no effect if the device is currently synchronising its clock via NTP.")
 
     lazy val riotInstall = taskKey[Unit]("Installs an application as a Systemd service to a Raspberry Pi or similar device.")
     lazy val riotUninstall = taskKey[Unit]("Remove an aplication from Systemd.")
@@ -65,6 +66,7 @@ object RiotCtl extends AutoPlugin {
     riotRequiresSPI := false,
     riotRequiresSerial := false,
     riotRequiresOnewire := false,
+    riotUpdateTime := true,
     riotPrereqs := "oracle-java8-jdk wiringpi",
     riotDbgPort := 8000,
     riotInstall := installTask.value,
@@ -76,7 +78,7 @@ object RiotCtl extends AutoPlugin {
 
   private def installTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
       .deploy().install().close();
   }
 
@@ -87,19 +89,19 @@ object RiotCtl extends AutoPlugin {
 
   private def runTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
       .deploy().run().close();
   }
 
   private def debugTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
       .deployDbg(riotDbgPort.value).run().close();
   }
 
   private def startTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value)
+      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
       .start().close();
   }
 
