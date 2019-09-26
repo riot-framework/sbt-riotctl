@@ -78,7 +78,8 @@ object RiotCtl extends AutoPlugin {
 
   private def installTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensurePackages(riotPrereqs.value)
       .deploy().install().close();
   }
 
@@ -89,19 +90,22 @@ object RiotCtl extends AutoPlugin {
 
   private def runTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensurePackages(riotPrereqs.value)
       .deploy().run().close();
   }
 
   private def debugTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensurePackages(riotPrereqs.value)
       .deployDbg(riotDbgPort.value).run().close();
   }
 
   private def startTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
-      .ensurePackages(riotPrereqs.value).ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensureEnabled(riotRequiresI2C.value, riotRequiresSPI.value, riotRequiresSerial.value, riotRequiresOnewire.value, riotUpdateTime.value)
+      .ensurePackages(riotPrereqs.value)
       .start().close();
   }
 
