@@ -37,6 +37,7 @@ object RiotCtl extends AutoPlugin {
     lazy val riotDebug = taskKey[Unit]("Debugs an application remotely on a Raspberry Pi or similar device, using jdwp remote debugging.")
     lazy val riotStart = taskKey[Unit]("Starts the application on the remote device.")
     lazy val riotStop = taskKey[Unit]("Stops the application on the remote device.")
+    lazy val riotDiscover = taskKey[Unit]("Scans the adapters for mDNS notifications to discover reacheable SSH hosts.")
   }
 
   case class riotTarget(valHostname: String, valUsername: String, valPassword: String) extends Target(Target.DiscoveryMethod.HOST_THEN_MDNS, valHostname, valUsername, valPassword)
@@ -67,14 +68,15 @@ object RiotCtl extends AutoPlugin {
     riotRequiresSerial := false,
     riotRequiresOnewire := false,
     riotUpdateTime := true,
-    riotPrereqs := "oracle-java8-jdk wiringpi",
+    riotPrereqs := "openjdk-8-jdk wiringpi",
     riotDbgPort := 8000,
     riotInstall := installTask.value,
     riotUninstall := uninstallTask.value,
     riotRun := runTask.value,
     riotDebug := debugTask.value,
     riotStart := startTask.value,
-    riotStop := stopTask.value)
+    riotStop := stopTask.value,
+    riotDiscover := discoverTask.value)
 
   private def installTask = Def.task {
     new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
@@ -114,4 +116,8 @@ object RiotCtl extends AutoPlugin {
       .stop().close();
   }
 
+  private def discoverTask = Def.task {
+    new RiotCtlTool(packageName.value, stage.value, JavaConverters.seqAsJavaList(riotTargets.value), new sbtLogger(sLog.value))
+      .stop().close();
+  }
 }
