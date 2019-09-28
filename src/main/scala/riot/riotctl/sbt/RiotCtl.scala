@@ -29,7 +29,7 @@ object RiotCtl extends AutoPlugin {
     lazy val riotRequiresSPI = settingKey[Boolean]("Whether to ensure SPI is enabled when deploying.")
     lazy val riotRequiresSerial = settingKey[Boolean]("Whether to ensure the serial port is enabled when deploying.")
     lazy val riotRequiresOnewire = settingKey[Boolean]("Whether to ensure 1Wire is enabled when deploying.")
-    lazy val riotUpdateTime = settingKey[Boolean]("Whether to update the target device's clock when deploying. This will have no effect if the device is currently synchronising its clock via NTP.")
+    lazy val riotUpdateTime = settingKey[Boolean]("Whether to update the target device's clock when deploying. This will have no effect if the device is currently synchronising its clock via NTP, but will disable synchronisation otherwise.")
 
     lazy val riotInstall = taskKey[Unit]("Installs an application as a Systemd service to a Raspberry Pi or similar device.")
     lazy val riotUninstall = taskKey[Unit]("Remove an aplication from Systemd.")

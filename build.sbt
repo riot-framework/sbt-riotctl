@@ -14,13 +14,13 @@ lazy val root =
     )
     .settings(releasePublishSettings)
     .settings(libraryDependencies ++= Seq(
-	  "org.riot-framework" % "riotctl" % "0.6-SNAPSHOT" 
+	  "org.riot-framework" % "riotctl" % "0.6" 
 	)
 )
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.4.0")
 
-resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + ".m2/repository"
+// resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL + ".m2/repository"
 
 scalacOptions in Compile ++= Seq("-encoding", "UTF-8", "-deprecation", "-feature")
 javacOptions in Compile ++= Seq("-encoding", "UTF-8")
