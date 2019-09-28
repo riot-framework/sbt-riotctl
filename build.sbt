@@ -8,13 +8,13 @@ lazy val root =
     .settings(
       organization := "org.riot-framework",
       name := "sbt-riotctl",
-      version := "0.4",
+      version := "0.5",
       scalaVersion := "2.12.8",
       sbtPlugin := true
     )
     .settings(releasePublishSettings)
     .settings(libraryDependencies ++= Seq(
-	  "org.riot-framework" % "riotctl" % "0.4" 
+	  "org.riot-framework" % "riotctl" % "0.5" 
 	)
 )
 
