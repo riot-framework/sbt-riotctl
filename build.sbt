@@ -8,7 +8,7 @@ lazy val root =
     .settings(
       organization := "org.riot-framework",
       name := "sbt-riotctl",
-      version := "0.6",
+      version := "0.6.1",
       scalaVersion := "2.12.8",
       sbtPlugin := true
     )
