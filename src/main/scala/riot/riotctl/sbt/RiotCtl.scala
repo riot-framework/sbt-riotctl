@@ -68,7 +68,7 @@ object RiotCtl extends AutoPlugin {
     riotRequiresSerial := false,
     riotRequiresOnewire := false,
     riotUpdateTime := true,
-    riotPrereqs := "openjdk-8-jdk wiringpi",
+    riotPrereqs := "default-jdk-headless wiringpi",
     riotDbgPort := 8000,
     riotInstall := installTask.value,
     riotUninstall := uninstallTask.value,
