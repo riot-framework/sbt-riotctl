@@ -105,6 +105,39 @@ then enter the commands above (without sbt, for example just `riotRun`). This al
 
 Many IDE have some sort of plugin to integrate with SBT, speeding up the development cycle even more.
 
+## Troubleshooting deployment issues
+
+Problems tend to arise most often when installing prerequisite packages. This only happens during the first deployment of an Application, and may take a long time depending on the packages installed.
+
+##### Out of memory when installing prerequisite packages
+
+As the apt-get traffic is proxied through the installation tool (your Pi may not have internet access), it may run out of memory when downloading large packages (such as the Java JDK). The following error is an indication that this is happening:
+
+```
+[info] E: Failed to fetch http://debian.anexia.at/raspbian/raspbian/pool/main/o/openjdk-11/openjdk-11-jdk-headless_11.0.3+7-5_armhf.deb  Connection failed [IP: 127.0.0.1 8080]
+[info] E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+```
+
+If this is the case, make sure `sbt` has enough memory. The easiest way to do this is to add a file named `.jvmopts` in your project's root directory:
+
+```
+-Xms1024M
+-Xmx4096M
+-Xss2M
+-XX:MaxMetaspaceSize=1024M
+```
+
+##### Message 'Release file ... is not valid yet'
+
+A freshly installed Pi without internet access will have a system date that is far in the past. RIoT tries to detect this and set the time to your development machine's time, but if this fails for some reason, subsequent package installations will fail with rather confusing messages such as:
+
+```
+[info] E: Release file for http://raspbian.raspberrypi.org/raspbian/dists/buster/InRelease is not valid yet (invalid for another 80d 10h 26min 56s). Updates for this repository will not be applied.
+```
+
+In this case, make sure your Pi's system clock is somewhat correct. It may help to wait for a while after the Raspberry Pi has booted, to allow it to synchronise to internet time sources or others.
+
+
 ## What happens during deployment
 
 RIoT control runs after `JavaServerAppPackaging`, and uses the files it generates.
