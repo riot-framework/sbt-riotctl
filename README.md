@@ -1,9 +1,3 @@
----
-title: 'Deploying your code with Riot Control'
-weight: 3
-summary: Connecting to your Pi using RIoT Control
----
-
 RIoT Control is a tool that automates the deployment of your Java code to a Raspberry Pi or similar device. It finds your device on a local network, copies your java archives to it, creates a service configuration file, and starts your application or sets it as a service.
 
 Currently, it is only available as a plugin for the [SBT] build tool.

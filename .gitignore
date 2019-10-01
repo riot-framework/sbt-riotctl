@@ -13,6 +13,10 @@ target
 
 project/project
 
+# IDEA
+.idea
+*.iml
+
 # MacOS
 Icon?
 release.sh
